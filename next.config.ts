@@ -13,5 +13,5 @@ const nextConfig: NextConfig = {
 };
 
 
-// dawdwad
+// dawdwaddawda
 export default nextConfig;
