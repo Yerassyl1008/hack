@@ -1,0 +1,92 @@
+{
+  "Meta": {
+    "title": "Tactical Ecology — city monitoring",
+    "description": "City monitoring, map, and AI-powered waste analysis."
+  },
+  "Common": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "sectionInDevelopment": "This section is under development",
+    "loadingAddress": "Resolving address…"
+  },
+  "Sidebar": {
+    "brand": "Tactical Ecology",
+    "subtitle": "City Monitoring v2.1",
+    "nav": {
+      "dashboard": "Dashboard",
+      "analytics": "Analytics",
+      "waste-scanner": "Waste Scanner",
+      "city-map": "City Map",
+      "incident-reports": "Incident Reports"
+    },
+    "newIncident": "New Incident",
+    "settings": "Settings",
+    "support": "Support",
+    "navAria": "Main navigation"
+  },
+  "Header": {
+    "tabsNavAria": "Section tabs",
+    "searchPlaceholder": "Search resources…",
+    "tabGlobal": "Global View",
+    "tabHealth": "System Health",
+    "exportData": "Export Data",
+    "notifications": "Notifications",
+    "account": "Account"
+  },
+  "LocaleSwitcher": {
+    "label": "Language"
+  },
+  "Map": {
+    "loading": "Loading map…",
+    "selectedTitle": "Location selected",
+    "selectedHint": "Photo analysis will be tied to this point.",
+    "incidentTitle": "Incident recorded"
+  },
+  "WasteScanner": {
+    "title": "Waste AI",
+    "subtitle": "Smart sorting assistant",
+    "pickLocationHint": "First tap the map on the right and choose where the waste was photographed.",
+    "addressLabel": "Address:",
+    "changePhoto": "Tap or drag another photo",
+    "uploadTitle": "Upload a waste photo",
+    "uploadHint": "After choosing a point — drag a file or tap to browse",
+    "analyze": "Send for analysis",
+    "analyzing": "Analyzing…",
+    "resultTitle": "Scan result",
+    "confidenceSuffix": "confidence",
+    "emptyResult": "Results will appear after the photo is analyzed on the server.",
+    "ecoFactTitle": "Eco fact",
+    "ecoFactPlaceholder": "After analysis, a recycling fact about the detected material may appear here.",
+    "altSelected": "Selected photo",
+    "altUploaded": "Uploaded photo",
+    "altDemo": "Sample",
+    "errors": {
+      "serverParse": "Could not parse the server response",
+      "network": "Network error: could not send the request. Ensure the backend is running and BACKEND_API_URL / NEXT_PUBLIC_API_URL is set in .env.",
+      "generic": "Request failed",
+      "moderationRejected": "Image rejected by moderation."
+    }
+  },
+  "Dashboard": {
+    "smartCityTitle": "Smart City AI",
+    "smartCitySubtitle": "Incident Detection System",
+    "uploadEvidence": "Upload evidence",
+    "clickOrDrag": "Click or drag an image here",
+    "startAnalysis": "Start AI analysis",
+    "analyzing": "Analyzing…",
+    "criticalAlert": "CRITICAL ALERT",
+    "photoAnalyzed": "Photo analyzed",
+    "category": "Category",
+    "urgency": "Urgency",
+    "urgencyLevels": {
+      "high": "high",
+      "medium": "medium",
+      "low": "low"
+    },
+    "locationPlace": "Location",
+    "autoRecommendation": "Recommendation",
+    "ignoreCase": "Ignore",
+    "dispatchTeam": "Dispatch team",
+    "previewAlt": "Preview"
+  }
+}

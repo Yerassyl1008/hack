@@ -10,6 +10,7 @@ import {
   ScanLine,
   Settings,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export type NavId =
   | "dashboard"
@@ -18,12 +19,12 @@ export type NavId =
   | "city-map"
   | "incident-reports";
 
-const navItems: { id: NavId; label: string; icon: typeof LayoutGrid }[] = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutGrid },
-  { id: "analytics", label: "Analytics", icon: BarChart2 },
-  { id: "waste-scanner", label: "Waste Scanner", icon: ScanLine },
-  { id: "city-map", label: "City Map", icon: Map },
-  { id: "incident-reports", label: "Incident Reports", icon: AlertOctagon },
+const navItems: { id: NavId; icon: typeof LayoutGrid }[] = [
+  { id: "dashboard", icon: LayoutGrid },
+  { id: "analytics", icon: BarChart2 },
+  { id: "waste-scanner", icon: ScanLine },
+  { id: "city-map", icon: Map },
+  { id: "incident-reports", icon: AlertOctagon },
 ];
 
 type SidebarProps = {
@@ -34,6 +35,8 @@ type SidebarProps = {
 };
 
 export default function Sidebar({ activeId, onNavigate, mobileOpen = false }: SidebarProps) {
+  const t = useTranslations("Sidebar");
+
   return (
     <aside
       className={`flex h-screen w-[min(18rem,85vw)] shrink-0 flex-col border-r border-slate-200/90 bg-slate-50 transition-transform duration-200 ease-out lg:relative lg:z-0 lg:w-[15%] lg:min-w-[11rem] lg:max-w-[20rem] lg:translate-x-0 ${
@@ -42,15 +45,13 @@ export default function Sidebar({ activeId, onNavigate, mobileOpen = false }: Si
     >
       {/* Brand */}
       <div className="px-5 pt-6 pb-5">
-        <h1 className="text-lg font-bold tracking-tight text-emerald-800">
-          Tactical Ecology
-        </h1>
-        <p className="mt-1 text-sm text-gray-500">City Monitoring v2.1</p>
+        <h1 className="text-lg font-bold tracking-tight text-emerald-800">{t("brand")}</h1>
+        <p className="mt-1 text-sm text-gray-500">{t("subtitle")}</p>
       </div>
 
       {/* Primary nav */}
-      <nav className="flex flex-col gap-0.5 px-3" aria-label="Application">
-        {navItems.map(({ id, label, icon: Icon }) => {
+      <nav className="flex flex-col gap-0.5 px-3" aria-label={t("navAria")}>
+        {navItems.map(({ id, icon: Icon }) => {
           const active = activeId === id;
           return (
             <button
@@ -69,7 +70,7 @@ export default function Sidebar({ activeId, onNavigate, mobileOpen = false }: Si
                 strokeWidth={active ? 2.25 : 2}
                 aria-hidden
               />
-              {label}
+              {t(`nav.${id}`)}
             </button>
           );
         })}
@@ -84,9 +85,7 @@ export default function Sidebar({ activeId, onNavigate, mobileOpen = false }: Si
           className="mb-5 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
         >
           <Plus className="h-4 w-4" strokeWidth={2.5} aria-hidden />
-          <span className="items-center justify-center">
-          New Incident
-          </span>
+          <span className="items-center justify-center">{t("newIncident")}</span>
         </button>
 
         <div className="flex flex-col gap-0.5">
@@ -95,14 +94,14 @@ export default function Sidebar({ activeId, onNavigate, mobileOpen = false }: Si
             className="flex w-full items-center gap-3 rounded-lg py-2.5 pl-3 pr-4 text-left text-sm font-medium text-gray-500 transition hover:bg-slate-100/80 hover:text-gray-700"
           >
             <Settings className="h-5 w-5 shrink-0 text-gray-500" strokeWidth={2} aria-hidden />
-            Settings
+            {t("settings")}
           </button>
           <button
             type="button"
             className="flex w-full items-center gap-3 rounded-lg py-2.5 pl-3 pr-4 text-left text-sm font-medium text-gray-500 transition hover:bg-slate-100/80 hover:text-gray-700"
           >
             <HelpCircle className="h-5 w-5 shrink-0 text-gray-500" strokeWidth={2} aria-hidden />
-            Support
+            {t("support")}
           </button>
         </div>
       </div>

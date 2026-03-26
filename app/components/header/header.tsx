@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Bell, CircleUser, Menu, Search } from "lucide-react";
+import { useTranslations } from "next-intl";
+import LocaleSwitcher from "@/app/components/locale-switcher/locale-switcher";
 
 const accent = "text-[#1a9b7a]";
 const muted = "text-slate-500";
@@ -13,16 +15,18 @@ type HeaderProps = {
 };
 
 export default function Header({ onMenuClick }: HeaderProps) {
+  const t = useTranslations("Header");
+  const tCommon = useTranslations("Common");
   const [activeTab, setActiveTab] = useState<TabId>("global");
 
   return (
-    <header className="z-20 flex min-h-14 shrink-0 items-center gap-3 border-b border-slate-200/80 bg-white px-3 py-3 shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:gap-8 sm:px-6 rounded-tr-2xl">
+    <header className="z-20 flex min-h-14 shrink-0 flex-wrap items-center gap-2 border-b border-slate-200/80 bg-white px-3 py-3 shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:gap-4 sm:px-6 lg:gap-8 rounded-tr-2xl">
       {onMenuClick && (
         <button
           type="button"
           onClick={onMenuClick}
           className="shrink-0 rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 lg:hidden"
-          aria-label="Открыть меню"
+          aria-label={tCommon("openMenu")}
         >
           <Menu className="h-6 w-6" strokeWidth={2} aria-hidden />
         </button>
@@ -36,7 +40,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
         />
         <input
           type="search"
-          placeholder="Search resources..."
+          placeholder={t("searchPlaceholder")}
           className="w-full rounded-full border-0 bg-slate-100 py-2.5 pl-10 pr-4 text-sm text-slate-800 placeholder:text-slate-400 outline-none ring-1 ring-slate-200/60 transition focus:bg-white focus:ring-2 focus:ring-[#1a9b7a]/25"
         />
       </div>
@@ -44,7 +48,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
       {/* Center tabs */}
       <nav
         className="flex flex-1 items-end justify-center gap-10 sm:gap-14"
-        aria-label="Main navigation"
+        aria-label={t("tabsNavAria")}
       >
         <button
           type="button"
@@ -54,7 +58,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           }`}
           aria-current={activeTab === "global" ? "page" : undefined}
         >
-          Global View
+          {t("tabGlobal")}
           {activeTab === "global" && (
             <span
               className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full bg-[#1a9b7a]"
@@ -70,7 +74,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           }`}
           aria-current={activeTab === "health" ? "page" : undefined}
         >
-          System Health
+          {t("tabHealth")}
           {activeTab === "health" && (
             <span
               className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full bg-[#1a9b7a]"
@@ -81,26 +85,27 @@ export default function Header({ onMenuClick }: HeaderProps) {
       </nav>
 
       {/* Actions */}
-      <div className="flex shrink-0 items-center gap-4">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+        <LocaleSwitcher />
         <button
           type="button"
           className={`text-sm font-medium ${accent} transition hover:opacity-80`}
         >
-          Export Data
+          {t("exportData")}
         </button>
         <span className="hidden h-5 w-px bg-slate-200 sm:block" aria-hidden />
         <div className="flex items-center gap-3">
           <button
             type="button"
             className={`rounded-lg p-1.5 ${muted} transition hover:bg-slate-100 hover:text-slate-700`}
-            aria-label="Notifications"
+            aria-label={t("notifications")}
           >
             <Bell className="h-5 w-5" strokeWidth={2} />
           </button>
           <button
             type="button"
             className={`rounded-full p-1 ${muted} transition hover:bg-slate-100 hover:text-slate-700`}
-            aria-label="Account"
+            aria-label={t("account")}
           >
             <CircleUser className="h-6 w-6" strokeWidth={1.75} />
           </button>

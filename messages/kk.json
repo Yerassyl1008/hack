@@ -1,0 +1,92 @@
+{
+  "Meta": {
+    "title": "Тактикалық экология — қала мониторингі",
+    "description": "Қала мониторингі жүйесі, карта және AI арқылы қалдық талдау."
+  },
+  "Common": {
+    "openMenu": "Мәзірді ашу",
+    "closeMenu": "Мәзірді жабу",
+    "sectionInDevelopment": "Бөлім әзірленуде",
+    "loadingAddress": "Мекенжай анықталуда…"
+  },
+  "Sidebar": {
+    "brand": "Тактикалық экология",
+    "subtitle": "Қала мониторингі v2.1",
+    "nav": {
+      "dashboard": "Бақылау тақтасы",
+      "analytics": "Талдау",
+      "waste-scanner": "Қалдық сканері",
+      "city-map": "Қала картасы",
+      "incident-reports": "Оқиғалар"
+    },
+    "newIncident": "Жаңа оқыға",
+    "settings": "Баптаулар",
+    "support": "Қолдау",
+    "navAria": "Негізгі навигация"
+  },
+  "Header": {
+    "tabsNavAria": "Бөлім қойындылары",
+    "searchPlaceholder": "Ресурстарды іздеу…",
+    "tabGlobal": "Жалпы көрініс",
+    "tabHealth": "Жүйе күйі",
+    "exportData": "Экспорт",
+    "notifications": "Хабарландырулар",
+    "account": "Аккаунт"
+  },
+  "LocaleSwitcher": {
+    "label": "Тіл"
+  },
+  "Map": {
+    "loading": "Карта жүктелуде…",
+    "selectedTitle": "Орын таңдалды",
+    "selectedHint": "Фотосурет талдауы осы нүктеге бекітіледі.",
+    "incidentTitle": "Оқыға тіркелді"
+  },
+  "WasteScanner": {
+    "title": "Қоқыс AI",
+    "subtitle": "Ақылды сұрыптау көмекшісі",
+    "pickLocationHint": "Алдымен оң жақтағы картада нүктені басып, қалдық түсірілген орынды таңдаңыз.",
+    "addressLabel": "Мекенжай:",
+    "changePhoto": "Басқа фотоны басыңыз немесе сүйреңіз",
+    "uploadTitle": "Қалдық фотосын жүктеңіз",
+    "uploadHint": "Нүктені таңдағаннан кейін файлды сүйреңіз немесе басыңыз",
+    "analyze": "Талдауға жіберу",
+    "analyzing": "Талдау…",
+    "resultTitle": "Сканерлеу нәтижесі",
+    "confidenceSuffix": "сенімділік",
+    "emptyResult": "Серверде фото талданғаннан кейін нәтиже осы жерде көрінеді.",
+    "ecoFactTitle": "Эко-факт",
+    "ecoFactPlaceholder": "Талдаудан кейін таңдалған материалды өңдеу туралы факт осында көрінуі мүмкін.",
+    "altSelected": "Таңдалған фото",
+    "altUploaded": "Жүктелген фото",
+    "altDemo": "Мысал",
+    "errors": {
+      "serverParse": "Сервер жауабын өңдеу мүмкін болмады",
+      "network": "Желіде қате. Бэкенд іске қосылғанын және .env файлында BACKEND_API_URL / NEXT_PUBLIC_API_URL орнатылғанын тексеріңіз.",
+      "generic": "Сұрау қатесі",
+      "moderationRejected": "Сурет модерация жүйесімен қабылданбады."
+    }
+  },
+  "Dashboard": {
+    "smartCityTitle": "Smart City AI",
+    "smartCitySubtitle": "Оқығаларды анықтау жүйесі",
+    "uploadEvidence": "Дәлел жүктеу",
+    "clickOrDrag": "Суретті басыңыз немесе сүйреңіз",
+    "startAnalysis": "AI талдауын бастау",
+    "analyzing": "Талдау…",
+    "criticalAlert": "МАҢЫЗДЫ ЕСКЕРТУ",
+    "photoAnalyzed": "Фото талданды",
+    "category": "Санат",
+    "urgency": "Шұғылдық",
+    "urgencyLevels": {
+      "high": "жоғары",
+      "medium": "орташа",
+      "low": "төмен"
+    },
+    "locationPlace": "Орналасу",
+    "autoRecommendation": "Ұсыныс",
+    "ignoreCase": "Елемеу",
+    "dispatchTeam": "Топ жіберу",
+    "previewAlt": "Қарау"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "Meta": {
+    "title": "Тактическая экология — мониторинг города",
+    "description": "Система мониторинга города, карта и AI-анализ отходов."
+  },
+  "Common": {
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню",
+    "sectionInDevelopment": "Раздел в разработке",
+    "loadingAddress": "Определяем адрес…"
+  },
+  "Sidebar": {
+    "brand": "Тактическая экология",
+    "subtitle": "Мониторинг города v2.1",
+    "nav": {
+      "dashboard": "Панель",
+      "analytics": "Аналитика",
+      "waste-scanner": "Сканер отходов",
+      "city-map": "Карта города",
+      "incident-reports": "Инциденты"
+    },
+    "newIncident": "Новый инцидент",
+    "settings": "Настройки",
+    "support": "Поддержка",
+    "navAria": "Основная навигация"
+  },
+  "Header": {
+    "tabsNavAria": "Вкладки раздела",
+    "searchPlaceholder": "Поиск ресурсов…",
+    "tabGlobal": "Обзор",
+    "tabHealth": "Состояние системы",
+    "exportData": "Экспорт данных",
+    "notifications": "Уведомления",
+    "account": "Аккаунт"
+  },
+  "LocaleSwitcher": {
+    "label": "Язык"
+  },
+  "Map": {
+    "loading": "Загрузка карты…",
+    "selectedTitle": "Выбрана локация",
+    "selectedHint": "Сюда будет привязан анализ фото.",
+    "incidentTitle": "Инцидент зафиксирован"
+  },
+  "WasteScanner": {
+    "title": "Қоқыс AI",
+    "subtitle": "Умный помощник по сортировке",
+    "pickLocationHint": "Сначала нажмите на карту справа и выберите место съёмки отходов.",
+    "addressLabel": "Адрес:",
+    "changePhoto": "Нажмите или перетащите другое фото",
+    "uploadTitle": "Загрузите фото отходов",
+    "uploadHint": "После выбора точки — перетащите файл или нажмите",
+    "analyze": "Отправить на анализ",
+    "analyzing": "Анализ…",
+    "resultTitle": "Результат сканирования",
+    "confidenceSuffix": "уверенность",
+    "emptyResult": "Результат появится после анализа фото на сервере.",
+    "ecoFactTitle": "Эко-факт",
+    "ecoFactPlaceholder": "После анализа здесь может отображаться факт об утилизации выбранного материала.",
+    "altSelected": "Выбранное фото",
+    "altUploaded": "Загруженное фото",
+    "altDemo": "Пример",
+    "errors": {
+      "serverParse": "Не удалось разобрать ответ сервера",
+      "network": "Сеть: не удалось отправить запрос. Проверьте, что бэкенд запущен и в .env задан BACKEND_API_URL / NEXT_PUBLIC_API_URL.",
+      "generic": "Ошибка запроса",
+      "moderationRejected": "Изображение отклонено системой модерации."
+    }
+  },
+  "Dashboard": {
+    "smartCityTitle": "Smart City AI",
+    "smartCitySubtitle": "Система обнаружения инцидентов",
+    "uploadEvidence": "Загрузить доказательства",
+    "clickOrDrag": "Нажмите или перетащите изображение",
+    "startAnalysis": "Запустить AI-анализ",
+    "analyzing": "Анализ…",
+    "criticalAlert": "КРИТИЧЕСКОЕ ПРЕДУПРЕЖДЕНИЕ",
+    "photoAnalyzed": "Фото проанализировано",
+    "category": "Категория",
+    "urgency": "Срочность",
+    "urgencyLevels": {
+      "high": "высокая",
+      "medium": "средняя",
+      "low": "низкая"
+    },
+    "locationPlace": "Местоположение",
+    "autoRecommendation": "Рекомендация",
+    "ignoreCase": "Игнорировать",
+    "dispatchTeam": "Отправить бригаду",
+    "previewAlt": "Превью"
+  }
+}

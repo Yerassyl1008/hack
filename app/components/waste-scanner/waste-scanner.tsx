@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Camera, Leaf, Loader2, MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { analyzeImage, type AnalysisPayload } from "@/lib/api";
 
 const DEMO_BOTTLE =
@@ -12,6 +13,9 @@ type WasteScannerProps = {
   location: { lat: number; lng: number };
   /** Пользователь кликнул по карте и зафиксировал точку */
   locationReady: boolean;
+  /** Адрес по координатам (если ещё грузится — см. placeLoading) */
+  placeLabel?: string | null;
+  placeLoading?: boolean;
   /** После успешного анализа — добавить маркер на карту */
   onAnalysisSuccess?: (summary: string) => void;
 };
@@ -19,8 +23,12 @@ type WasteScannerProps = {
 export default function WasteScanner({
   location,
   locationReady,
+  placeLabel = null,
+  placeLoading = false,
   onAnalysisSuccess,
 }: WasteScannerProps) {
+  const t = useTranslations("WasteScanner");
+  const tCommon = useTranslations("Common");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisPayload | null>(null);
@@ -93,7 +101,7 @@ export default function WasteScanner({
         if (status === "rejected") {
           setFeedback({
             tone: "warning",
-            text: message ?? "Изображение отклонено системой модерации.",
+            text: message ?? t("errors.moderationRejected"),
           });
           return;
         }
@@ -102,22 +110,22 @@ export default function WasteScanner({
       } else {
         setFeedback({
           tone: "danger",
-          text: "Не удалось разобрать ответ сервера",
+          text: t("errors.serverParse"),
         });
       }
     } catch (e) {
       const msg =
         e instanceof Error
           ? e.message === "Failed to fetch"
-            ? "Сеть: не удалось отправить запрос. Проверьте, что бэкенд запущен и в .env задан BACKEND_API_URL / NEXT_PUBLIC_API_URL."
+            ? t("errors.network")
             : e.message
-          : "Ошибка запроса";
+          : t("errors.generic");
       setFeedback({ tone: "danger", text: msg });
       setResult(null);
     } finally {
       setLoading(false);
     }
-  }, [file, location.lat, location.lng, locationReady, onAnalysisSuccess]);
+  }, [file, location.lat, location.lng, locationReady, onAnalysisSuccess, t]);
 
   const displayImage = preview;
 
@@ -125,26 +133,33 @@ export default function WasteScanner({
     <div className="flex h-full min-h-0 flex-col gap-2 overflow-hidden px-2 py-2 sm:gap-2.5 sm:px-3 sm:py-3 lg:gap-3 lg:px-3.5">
       <header className="shrink-0">
         <h1 className="text-base font-bold leading-tight tracking-tight text-slate-900 sm:text-lg lg:text-xl">
-          Қоқыс AI
+          {t("title")}
         </h1>
-        <p className="mt-0.5 text-[11px] text-slate-500 sm:text-xs">
-          Умный помощник по сортировке
-        </p>
+        <p className="mt-0.5 text-[11px] text-slate-500 sm:text-xs">{t("subtitle")}</p>
       </header>
 
       {!locationReady && (
         <div className="flex shrink-0 items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-2 text-[11px] text-amber-900 sm:text-xs">
           <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-          <span>Сначала нажмите на карту справа и выберите место съёмки отходов.</span>
+          <span>{t("pickLocationHint")}</span>
         </div>
       )}
 
       {locationReady && (
-        <p className="shrink-0 text-[10px] text-slate-500 sm:text-xs">
-          Точка:{" "}
-          <span className="font-mono text-slate-700">
-            {location.lat.toFixed(5)}, {location.lng.toFixed(5)}
-          </span>
+        <p className="shrink-0 text-[10px] leading-snug text-slate-600 sm:text-xs">
+          <span className="font-medium text-slate-500">{t("addressLabel")} </span>
+          {placeLoading ? (
+            <span className="text-slate-500">{tCommon("loadingAddress")}</span>
+          ) : (
+            <span
+              className={
+                placeLabel ? "text-slate-800" : "font-mono text-slate-700"
+              }
+            >
+              {placeLabel ??
+                `${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}`}
+            </span>
+          )}
         </p>
       )}
 
@@ -167,15 +182,13 @@ export default function WasteScanner({
             <div className="pointer-events-none flex flex-col items-center justify-center gap-2 text-center">
               <Image
                 src={preview}
-                alt="Выбранное фото"
+                alt={t("altSelected")}
                 unoptimized
                 width={400}
                 height={400}
                 className="max-h-36 max-w-full rounded-lg object-contain shadow-sm ring-1 ring-slate-200/80"
               />
-              <p className="text-[10px] text-slate-600 sm:text-xs">
-                Нажмите или перетащите другое фото
-              </p>
+              <p className="text-[10px] text-slate-600 sm:text-xs">{t("changePhoto")}</p>
             </div>
           ) : (
             <div className="pointer-events-none flex flex-col items-center gap-1.5 text-center sm:gap-2">
@@ -183,10 +196,10 @@ export default function WasteScanner({
                 <Camera className="h-5 w-5 text-emerald-600 sm:h-[22px] sm:w-[22px]" strokeWidth={1.75} aria-hidden />
               </div>
               <p className="text-xs font-medium leading-snug text-slate-800 sm:text-sm">
-                Загрузите фото отходов
+                {t("uploadTitle")}
               </p>
               <p className="max-w-[18rem] text-[10px] leading-tight text-slate-500 sm:text-xs">
-                После выбора точки — перетащите файл или нажмите
+                {t("uploadHint")}
               </p>
             </div>
           )}
@@ -203,10 +216,10 @@ export default function WasteScanner({
           {loading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-              Анализ…
+              {t("analyzing")}
             </>
           ) : (
-            "Отправить на анализ"
+            t("analyze")
           )}
         </button>
       )}
@@ -225,10 +238,10 @@ export default function WasteScanner({
 
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden sm:gap-2.5">
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-1.5">
-          <h2 className="text-xs font-semibold text-slate-900 sm:text-sm">Результат сканирования</h2>
+          <h2 className="text-xs font-semibold text-slate-900 sm:text-sm">{t("resultTitle")}</h2>
           {result?.confidenceLabel && (
             <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 sm:px-2.5 sm:text-xs">
-              {result.confidenceLabel} уверенность
+              {result.confidenceLabel} {t("confidenceSuffix")}
             </span>
           )}
         </div>
@@ -238,7 +251,7 @@ export default function WasteScanner({
             {displayImage ? (
               <Image
                 src={displayImage}
-                alt="Загруженное фото"
+                alt={t("altUploaded")}
                 unoptimized
                 width={400}
                 height={400}
@@ -247,7 +260,7 @@ export default function WasteScanner({
             ) : (
               <Image
                 src={DEMO_BOTTLE}
-                alt="Пример"
+                alt={t("altDemo")}
                 width={200}
                 height={200}
                 className="max-h-[min(100%,7rem)] w-auto object-contain opacity-40 sm:max-h-[8.5rem]"
@@ -270,7 +283,7 @@ export default function WasteScanner({
               </>
             ) : (
               <p className="text-[10px] leading-snug text-slate-400 sm:text-xs">
-                Результат появится после анализа фото на сервере.
+                {t("emptyResult")}
               </p>
             )}
           </div>
@@ -281,10 +294,9 @@ export default function WasteScanner({
             <Leaf className="h-4 w-4 text-emerald-800 sm:h-[18px] sm:w-[18px]" strokeWidth={2} aria-hidden />
           </div>
           <div className="min-h-0 min-w-0">
-            <p className="text-xs font-semibold text-emerald-900 sm:text-sm">Эко-факт</p>
+            <p className="text-xs font-semibold text-emerald-900 sm:text-sm">{t("ecoFactTitle")}</p>
             <p className="mt-0.5 line-clamp-4 text-[10px] leading-snug text-emerald-900/85 sm:line-clamp-none sm:text-xs sm:leading-relaxed">
-              {result?.ecoFact ??
-                "После анализа здесь может отображаться факт об утилизации выбранного материала."}
+              {result?.ecoFact ?? t("ecoFactPlaceholder")}
             </p>
           </div>
         </div>

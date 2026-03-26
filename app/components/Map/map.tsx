@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   MapContainer as LeafletMapContainer,
   TileLayer,
@@ -28,6 +29,9 @@ interface MapProps {
   setLocation: (loc: { lat: number; lng: number }) => void;
   markers: { lat: number; lng: number; problem: string }[];
   onLocationSelect?: () => void;
+  /** Человекочитаемый адрес выбранной точки (обратное геокодирование) */
+  selectedAddress?: string | null;
+  addressLoading?: boolean;
 }
 
 function LocationMarker({
@@ -51,7 +55,11 @@ export default function Map({
   setLocation,
   markers,
   onLocationSelect,
+  selectedAddress = null,
+  addressLoading = false,
 }: MapProps) {
+  const t = useTranslations("Map");
+  const tCommon = useTranslations("Common");
   const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
@@ -95,9 +103,16 @@ export default function Map({
         {location.lat != null && location.lng != null && (
           <Marker position={[location.lat, location.lng]} opacity={0.6}>
             <Popup>
-              <strong>Выбрана локация</strong>
+              <strong>{t("selectedTitle")}</strong>
               <br />
-              Сюда будет привязан анализ фото.
+              <span style={{ fontSize: 13, lineHeight: 1.35 }}>
+                {addressLoading
+                  ? tCommon("loadingAddress")
+                  : selectedAddress ??
+                    `${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}`}
+              </span>
+              <br />
+              <span style={{ fontSize: 12, color: "#64748b" }}>{t("selectedHint")}</span>
             </Popup>
           </Marker>
         )}
@@ -109,7 +124,7 @@ export default function Map({
                 <div
                   style={{ color: "#dc2626", fontWeight: "bold", marginBottom: "4px" }}
                 >
-                  ⚠️ Инцидент зафиксирован
+                  ⚠️ {t("incidentTitle")}
                 </div>
                 <div style={{ fontSize: "13px", lineHeight: "1.2" }}>
                   {marker.problem}
