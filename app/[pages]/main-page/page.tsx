@@ -1,4 +1,5 @@
 "use client";
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { MapPin, ShieldAlert, Upload, AlertTriangle } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -6,6 +7,15 @@ import Header from '@/app/components/header/header';
 import Sidebar, { type NavId } from '@/app/components/sidebar/sidebar';
 import WasteScanner from '@/app/components/waste-scanner/waste-scanner';
 import { analyzeImage } from '@/lib/api';
+
+type DashboardAnalysis = {
+  problem: string;
+  category: string;
+  urgency: string;
+  recommendation: string;
+  status: "success" | "rejected";
+  message?: string;
+};
 
 // Отключаем SSR для карты, так как Leaflet работает только в браузере
 const LeafletMap = dynamic(() => import('@/app/components/Map/map'), {
@@ -30,8 +40,9 @@ export default function Dashboard() {
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysis, setAnalysis] = useState<DashboardAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
+  const [requestError, setRequestError] = useState<string | null>(null);
   
   // Стартовые координаты (Шымкент)
   const [location, setLocation] = useState({ lat: 42.3417, lng: 69.5901 });
@@ -46,15 +57,17 @@ export default function Dashboard() {
       setPreviewUrl(URL.createObjectURL(file));
       // Сбрасываем предыдущий анализ при загрузке нового фото
       setAnalysis(null);
+      setRequestError(null);
     }
   };
 
   const handleUpload = async () => {
     if (!selectedImage) return;
     setLoading(true);
+    setRequestError(null);
 
     try {
-      const { analysis } = await analyzeImage(
+      const { analysis, message, status } = await analyzeImage(
         selectedImage,
         location.lat,
         location.lng
@@ -63,20 +76,29 @@ export default function Dashboard() {
         setAnalysis({
           problem: analysis.title,
           category: analysis.category,
-          urgency: "medium",
+          urgency: analysis.urgency ?? "unknown",
           recommendation: analysis.description,
+          status,
+          message,
         });
-        setIncidentMarkers((prev) => [
-          ...prev,
-          {
-            lat: location.lat,
-            lng: location.lng,
-            problem: analysis.title,
-          },
-        ]);
+        if (status === "success") {
+          setIncidentMarkers((prev) => [
+            ...prev,
+            {
+              lat: location.lat,
+              lng: location.lng,
+              problem: analysis.title,
+            },
+          ]);
+        }
+      } else {
+        setRequestError("Не удалось разобрать ответ сервера");
       }
     } catch (err) {
       console.error("Error analyzing image:", err);
+      setRequestError(
+        err instanceof Error ? err.message : "Ошибка запроса"
+      );
     } finally {
       setLoading(false);
     }
@@ -158,7 +180,14 @@ export default function Dashboard() {
                 accept="image/*"
               />
               {previewUrl ? (
-                <img src={previewUrl} alt="Preview" className="max-h-48 mx-auto rounded object-cover" />
+                <Image
+                  src={previewUrl}
+                  alt="Preview"
+                  unoptimized
+                  width={400}
+                  height={300}
+                  className="max-h-48 mx-auto rounded object-cover"
+                />
               ) : (
                 <div className="text-slate-500 flex flex-col items-center py-4">
                   <Upload className="w-8 h-8 mb-2 opacity-50" />
@@ -173,14 +202,23 @@ export default function Dashboard() {
             >
               {loading ? "Analyzing..." : "Start AI Analysis"}
             </button>
+            {requestError && (
+              <p className="mt-3 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                {requestError}
+              </p>
+            )}
           </div>
 
           {/* Результаты анализа */}
           {analysis && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 border-t pt-6">
-              <div className="flex items-center gap-2 text-red-600 font-bold mb-4">
+              <div
+                className={`mb-4 flex items-center gap-2 font-bold ${
+                  analysis.status === 'rejected' ? 'text-amber-600' : 'text-red-600'
+                }`}
+              >
                 <AlertTriangle className="w-5 h-5" />
-                CRITICAL ALERT
+                {analysis.status === 'rejected' ? 'MODERATION ALERT' : 'CRITICAL ALERT'}
               </div>
               
               <div className="mb-4">
@@ -212,15 +250,48 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="p-4 bg-red-50 border-l-4 border-red-600 mb-6 rounded-r">
-                <p className="text-[10px] uppercase text-red-600 font-bold mb-1">Auto-Recommendation</p>
+              {analysis.message && (
+                <div
+                  className={`mb-4 rounded-r border-l-4 p-4 ${
+                    analysis.status === 'rejected'
+                      ? 'border-amber-500 bg-amber-50'
+                      : 'border-blue-500 bg-blue-50'
+                  }`}
+                >
+                  <p
+                    className={`mb-1 text-[10px] uppercase font-bold ${
+                      analysis.status === 'rejected' ? 'text-amber-700' : 'text-blue-700'
+                    }`}
+                  >
+                    Server Message
+                  </p>
+                  <p className="text-sm text-slate-700 leading-relaxed">{analysis.message}</p>
+                </div>
+              )}
+
+              <div
+                className={`mb-6 rounded-r border-l-4 p-4 ${
+                  analysis.status === 'rejected'
+                    ? 'border-amber-500 bg-amber-50'
+                    : 'border-red-600 bg-red-50'
+                }`}
+              >
+                <p
+                  className={`mb-1 text-[10px] uppercase font-bold ${
+                    analysis.status === 'rejected' ? 'text-amber-700' : 'text-red-600'
+                  }`}
+                >
+                  Auto-Recommendation
+                </p>
                 <p className="text-sm text-slate-700 leading-relaxed">{analysis.recommendation}</p>
               </div>
 
-              <div className="flex gap-2 mt-auto">
-                <button className="flex-1 bg-slate-900 text-white py-3 rounded text-sm font-bold uppercase tracking-wider hover:bg-slate-800 transition">Ignore Case</button>
-                <button className="flex-1 bg-[#007F5F] text-white py-3 rounded text-sm font-bold uppercase tracking-wider hover:bg-emerald-700 transition shadow-md">Dispatch Team</button>
-              </div>
+              {analysis.status === 'success' && (
+                <div className="flex gap-2 mt-auto">
+                  <button className="flex-1 bg-slate-900 text-white py-3 rounded text-sm font-bold uppercase tracking-wider hover:bg-slate-800 transition">Ignore Case</button>
+                  <button className="flex-1 bg-[#007F5F] text-white py-3 rounded text-sm font-bold uppercase tracking-wider hover:bg-emerald-700 transition shadow-md">Dispatch Team</button>
+                </div>
+              )}
             </div>
           )}
           </div>

@@ -1,8 +1,10 @@
-const DEFAULT_API =
-  "https://8d6a-95-141-135-226.ngrok-free.app";
+const DEFAULT_API = "http://127.0.0.1:8000";
 
 export function getApiBaseUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_API_URL ?? DEFAULT_API;
+  const raw =
+    process.env.BACKEND_API_URL ??
+    process.env.NEXT_PUBLIC_API_URL ??
+    DEFAULT_API;
   return raw.replace(/\/$/, "");
 }
 
@@ -10,17 +12,34 @@ export type AnalysisPayload = {
   category: string;
   title: string;
   description: string;
+  urgency?: string;
   confidenceLabel?: string;
   ecoFact?: string;
 };
 
-function extractAnalysis(data: unknown): AnalysisPayload | null {
+export type AnalyzeStatus = "success" | "rejected" | "unknown";
+
+function asObject(data: unknown): Record<string, unknown> | null {
   if (data == null) return null;
-  let root: Record<string, unknown>;
+
   if (typeof data === "string") {
     try {
-      const p = JSON.parse(data) as unknown;
-      root = typeof p === "object" && p !== null ? (p as Record<string, unknown>) : {};
+      const parsed = JSON.parse(data) as unknown;
+      return typeof parsed === "object" && parsed !== null
+        ? (parsed as Record<string, unknown>)
+        : null;
+    } catch {
+      return null;
+    }
+  }
+
+  return typeof data === "object" ? (data as Record<string, unknown>) : null;
+}
+
+function extractAnalysis(data: unknown): AnalysisPayload | null {
+  if (typeof data === "string") {
+    try {
+      JSON.parse(data);
     } catch {
       return {
         category: "—",
@@ -28,11 +47,10 @@ function extractAnalysis(data: unknown): AnalysisPayload | null {
         description: data,
       };
     }
-  } else if (typeof data === "object") {
-    root = data as Record<string, unknown>;
-  } else {
-    return null;
   }
+
+  const root = asObject(data);
+  if (!root) return null;
 
   const a =
     root.analysis && typeof root.analysis === "object"
@@ -59,6 +77,10 @@ function extractAnalysis(data: unknown): AnalysisPayload | null {
     description: String(
       a.recommendation ?? a.instruction ?? a.description ?? ""
     ),
+    urgency:
+      a.urgency != null && a.urgency !== ""
+        ? String(a.urgency)
+        : undefined,
     confidenceLabel,
     ecoFact:
       a.eco_fact != null
@@ -84,7 +106,13 @@ export async function analyzeImage(
   file: File,
   lat: number,
   lng: number
-): Promise<{ raw: unknown; analysis: AnalysisPayload | null }> {
+): Promise<{
+  raw: unknown;
+  analysis: AnalysisPayload | null;
+  status: AnalyzeStatus;
+  message?: string;
+  incidentId: number | null;
+}> {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("lat", String(lat));
@@ -103,6 +131,16 @@ export async function analyzeImage(
     /* оставляем строку */
   }
 
+  const root = asObject(raw);
+  const status =
+    root?.status === "success" || root?.status === "rejected"
+      ? root.status
+      : "unknown";
+  const message =
+    typeof root?.message === "string" ? root.message : undefined;
+  const incidentId =
+    typeof root?.incident_id === "number" ? root.incident_id : null;
+
   if (!res.ok) {
     const detail =
       typeof raw === "object" && raw !== null && "detail" in raw
@@ -114,5 +152,8 @@ export async function analyzeImage(
   return {
     raw,
     analysis: extractAnalysis(raw),
+    status,
+    message,
+    incidentId,
   };
 }

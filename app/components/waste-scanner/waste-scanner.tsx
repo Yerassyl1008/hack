@@ -25,12 +25,15 @@ export default function WasteScanner({
   const [preview, setPreview] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisPayload | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{
+    tone: "danger" | "warning";
+    text: string;
+  } | null>(null);
   const previewBlobRef = useRef<string | null>(null);
 
   const applyFile = useCallback((f: File | undefined) => {
     if (!f || !f.type.startsWith("image/")) return;
-    setError(null);
+    setFeedback(null);
     setResult(null);
     if (previewBlobRef.current) {
       URL.revokeObjectURL(previewBlobRef.current);
@@ -78,14 +81,29 @@ export default function WasteScanner({
   const runAnalysis = useCallback(async () => {
     if (!file || !locationReady) return;
     setLoading(true);
-    setError(null);
+    setFeedback(null);
     try {
-      const { analysis } = await analyzeImage(file, location.lat, location.lng);
+      const { analysis, message, status } = await analyzeImage(
+        file,
+        location.lat,
+        location.lng
+      );
       if (analysis) {
         setResult(analysis);
+        if (status === "rejected") {
+          setFeedback({
+            tone: "warning",
+            text: message ?? "Изображение отклонено системой модерации.",
+          });
+          return;
+        }
+
         onAnalysisSuccess?.(analysis.title);
       } else {
-        setError("Не удалось разобрать ответ сервера");
+        setFeedback({
+          tone: "danger",
+          text: "Не удалось разобрать ответ сервера",
+        });
       }
     } catch (e) {
       const msg =
@@ -94,7 +112,7 @@ export default function WasteScanner({
             ? "Сеть: не удалось отправить запрос. Проверьте, что бэкенд запущен и в .env задан BACKEND_API_URL / NEXT_PUBLIC_API_URL."
             : e.message
           : "Ошибка запроса";
-      setError(msg);
+      setFeedback({ tone: "danger", text: msg });
       setResult(null);
     } finally {
       setLoading(false);
@@ -147,9 +165,12 @@ export default function WasteScanner({
           />
           {preview ? (
             <div className="pointer-events-none flex flex-col items-center justify-center gap-2 text-center">
-              <img
+              <Image
                 src={preview}
                 alt="Выбранное фото"
+                unoptimized
+                width={400}
+                height={400}
                 className="max-h-36 max-w-full rounded-lg object-contain shadow-sm ring-1 ring-slate-200/80"
               />
               <p className="text-[10px] text-slate-600 sm:text-xs">
@@ -190,9 +211,15 @@ export default function WasteScanner({
         </button>
       )}
 
-      {error && (
-        <p className="shrink-0 rounded-lg border border-red-200 bg-red-50 px-2 py-1.5 text-[10px] text-red-800 sm:text-xs">
-          {error}
+      {feedback && (
+        <p
+          className={`shrink-0 rounded-lg px-2 py-1.5 text-[10px] sm:text-xs ${
+            feedback.tone === "warning"
+              ? "border border-amber-200 bg-amber-50 text-amber-900"
+              : "border border-red-200 bg-red-50 text-red-800"
+          }`}
+        >
+          {feedback.text}
         </p>
       )}
 
@@ -209,7 +236,14 @@ export default function WasteScanner({
         <div className="flex min-h-[6.5rem] flex-1 flex-row overflow-hidden rounded-[20px] shadow-sm ring-1 ring-slate-200/70 sm:min-h-[7.5rem]">
           <div className="relative flex w-[38%] shrink-0 flex-col items-center justify-center bg-[#C6A689] p-2 sm:p-3">
             {displayImage ? (
-              <img src={displayImage} alt="Загруженное фото" className="max-h-full max-w-full object-contain" />
+              <Image
+                src={displayImage}
+                alt="Загруженное фото"
+                unoptimized
+                width={400}
+                height={400}
+                className="max-h-full max-w-full object-contain"
+              />
             ) : (
               <Image
                 src={DEMO_BOTTLE}

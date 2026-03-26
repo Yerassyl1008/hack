@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const DEFAULT_BACKEND =
-  "https://8d6a-95-141-135-226.ngrok-free.app";
+  "http://127.0.0.1:8010";
 
 function backendBase(): string {
   const raw =
@@ -12,8 +12,10 @@ function backendBase(): string {
 }
 
 /**
- * Прокси на бэкенд: браузер бьёт в /api/analyze-image (same-origin),
- * сервер пересылает multipart на ngrok — обходит CORS и часть блокировок.
+ * Браузер всегда стучится в same-origin `/api/analyze-image`,
+ * а Route Handler пересылает multipart в FastAPI backend.
+ * Это сохраняет простой клиентский fetch и позволяет при необходимости
+ * прокидывать запросы через туннели вроде ngrok без CORS-проблем.
  */
 export async function POST(request: NextRequest) {
   let formData: FormData;
@@ -29,7 +31,6 @@ export async function POST(request: NextRequest) {
   const target = `${backendBase()}/analyze-image`;
 
   try {
-    /** Ngrok отдаёт HTML-страницу-заглушку, если не передать skip (и иногда без «браузерного» UA). */
     const upstream = await fetch(target, {
       method: "POST",
       body: formData,
@@ -50,12 +51,12 @@ export async function POST(request: NextRequest) {
       (text.trimStart().startsWith("<!") && text.includes("ngrok"))
     ) {
       console.error(
-        "[analyze-image proxy] ngrok вернул HTML вместо API. Проверьте туннель и BACKEND_API_URL."
+        "[analyze-image proxy] backend вернул HTML вместо API. Проверьте BACKEND_API_URL и POST /analyze-image."
       );
       return NextResponse.json(
         {
           detail:
-            "Бэкенд вернул HTML (часто это страница-предупреждение ngrok). Убедитесь, что туннель запущен, URL в .env верный, на бэкенде открыт POST /analyze-image.",
+            "Бэкенд вернул HTML вместо JSON. Убедитесь, что URL в .env.local верный и на backend открыт POST /analyze-image.",
         },
         { status: 502 }
       );

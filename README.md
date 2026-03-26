@@ -1,3 +1,62 @@
+## Backend integration
+
+Этот фронт уже интегрируется с backend через `POST /analyze-image`.
+Браузер отправляет файл в Next route handler [`app/api/analyze-image/route.ts`](/home/erasyl/Documents/hackaton_front/hack/app/api/analyze-image/route.ts), а тот проксирует multipart-запрос в ваш FastAPI backend.
+
+### 1. Укажите backend URL
+
+Создайте `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+По умолчанию фронт ожидает backend на `http://127.0.0.1:8000`.
+Если FastAPI запущен на другом хосте или через туннель, измените:
+
+```env
+BACKEND_API_URL=http://127.0.0.1:8000
+```
+
+### 2. Запустите backend
+
+Из папки backend, например:
+
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+На backend должен быть доступен endpoint:
+
+```text
+POST /analyze-image
+```
+
+Он принимает `multipart/form-data` с полями:
+
+```text
+file
+lat
+lng
+```
+
+### 3. Запустите frontend
+
+```bash
+npm install
+npm run dev
+```
+
+Откройте `http://localhost:3000`.
+
+### 4. Что уже поддержано
+
+- Успешный ответ backend со `status: "success"` добавляет инцидент на карту.
+- Ответ со `status: "rejected"` показывает результат модерации, но не создаёт инцидент.
+- Весь клиентский код ходит через same-origin `/api/analyze-image`, поэтому отдельный CORS на фронте не нужен.
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
