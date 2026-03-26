@@ -13,7 +13,6 @@
     "brand": "Тактическая экология",
     "subtitle": "Мониторинг города v2.1",
     "nav": {
-      "dashboard": "Панель",
       "analytics": "Аналитика",
       "waste-scanner": "Сканер отходов",
       "city-map": "Карта города",
@@ -40,7 +39,11 @@
     "loading": "Загрузка карты…",
     "selectedTitle": "Выбрана локация",
     "selectedHint": "Сюда будет привязан анализ фото.",
-    "incidentTitle": "Инцидент зафиксирован"
+    "incidentRecordedTitle": "Зафиксирован инцидент",
+    "incidentRecordedHint": "Данные с карты и анализа. При необходимости направьте выездную группу.",
+    "incidentErrorTitle": "Требуется проверка",
+    "incidentErrorHint": "Модерация или сбой анализа. Проверьте снимок, адрес и повторите попытку.",
+    "recommendationCaption": "Рекомендация"
   },
   "WasteScanner": {
     "title": "Қоқыс AI",
@@ -67,26 +70,40 @@
       "moderationRejected": "Изображение отклонено системой модерации."
     }
   },
-  "Dashboard": {
-    "smartCityTitle": "Smart City AI",
-    "smartCitySubtitle": "Система обнаружения инцидентов",
-    "uploadEvidence": "Загрузить доказательства",
-    "clickOrDrag": "Нажмите или перетащите изображение",
-    "startAnalysis": "Запустить AI-анализ",
-    "analyzing": "Анализ…",
-    "criticalAlert": "КРИТИЧЕСКОЕ ПРЕДУПРЕЖДЕНИЕ",
-    "photoAnalyzed": "Фото проанализировано",
-    "category": "Категория",
-    "urgency": "Срочность",
-    "urgencyLevels": {
-      "high": "высокая",
-      "medium": "средняя",
-      "low": "низкая"
-    },
-    "locationPlace": "Местоположение",
-    "autoRecommendation": "Рекомендация",
-    "ignoreCase": "Игнорировать",
-    "dispatchTeam": "Отправить бригаду",
-    "previewAlt": "Превью"
+  "Incidents": {
+    "title": "Зафиксированные инциденты",
+    "subtitle": "Все случаи с карты: успешный анализ и ошибки модерации.",
+    "emptyTitle": "Пока нет записей",
+    "emptyHint": "Отправьте фото в «Сканер отходов» — записи появятся здесь и сохранятся на карте.",
+    "badgeOk": "Запись",
+    "badgeError": "Внимание",
+    "showOnMap": "Показать на карте",
+    "addressLine": "Адрес",
+    "recommendationLine": "Рекомендация"
+  },
+  "Analytics": {
+    "title": "Учёт выездов и аналитика",
+    "subtitle": "После уборки удалите точку — она исчезнет с карты и из списков.",
+    "statTotal": "Всего активных",
+    "statOk": "Обработано ИИ",
+    "statAttention": "Нужна проверка",
+    "queueHint": "Уборщики: подтвердите удаление, когда объект ликвидирован.",
+    "clearAll": "Очистить всё",
+    "clearAllConfirm": "Удалить все точки с карты? Это действие нельзя отменить.",
+    "deleteConfirm": "Удалить эту запись? «{title}» — точка исчезнет с карты.",
+    "modalDeleteTitle": "Удалить эту запись?",
+    "modalDeleteBody": "Точка пропадёт с карты и из списков инцидентов.",
+    "modalDeleteItem": "«{title}»",
+    "modalClearTitle": "Удалить все точки?",
+    "modalClearBody": "С карты и из учёта исчезнут все активные инциденты. Это нельзя отменить.",
+    "confirmCancel": "Нет, оставить",
+    "confirmRemove": "Да, удалить",
+    "emptyTitle": "Активных записей нет",
+    "emptyHint": "Новые инциденты появляются после анализа фото в сканере.",
+    "badgeOk": "Запись",
+    "badgeError": "Внимание",
+    "showOnMap": "Показать на карте",
+    "recommendation": "Рекомендация",
+    "remove": "Убрано / удалить"
   }
 }

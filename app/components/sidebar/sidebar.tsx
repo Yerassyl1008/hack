@@ -13,14 +13,12 @@ import {
 import { useTranslations } from "next-intl";
 
 export type NavId =
-  | "dashboard"
   | "analytics"
   | "waste-scanner"
   | "city-map"
   | "incident-reports";
 
 const navItems: { id: NavId; icon: typeof LayoutGrid }[] = [
-  { id: "dashboard", icon: LayoutGrid },
   { id: "analytics", icon: BarChart2 },
   { id: "waste-scanner", icon: ScanLine },
   { id: "city-map", icon: Map },

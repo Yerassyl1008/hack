@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Camera, Leaf, Loader2, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { analyzeImage, type AnalysisPayload } from "@/lib/api";
+import type { MapMarkerSeverity } from "@/lib/incident-markers";
 
 const DEMO_BOTTLE =
   "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=400&fit=crop&q=80";
@@ -16,8 +17,12 @@ type WasteScannerProps = {
   /** Адрес по координатам (если ещё грузится — см. placeLoading) */
   placeLabel?: string | null;
   placeLoading?: boolean;
-  /** После успешного анализа — добавить маркер на карту */
-  onAnalysisSuccess?: (summary: string) => void;
+  /** Маркер на карте после анализа (успех — синий, модерация/ошибка — красный) */
+  onMapIncident?: (payload: {
+    summary: string;
+    severity: MapMarkerSeverity;
+    recommendation?: string;
+  }) => void;
 };
 
 export default function WasteScanner({
@@ -25,7 +30,7 @@ export default function WasteScanner({
   locationReady,
   placeLabel = null,
   placeLoading = false,
-  onAnalysisSuccess,
+  onMapIncident,
 }: WasteScannerProps) {
   const t = useTranslations("WasteScanner");
   const tCommon = useTranslations("Common");
@@ -103,14 +108,31 @@ export default function WasteScanner({
             tone: "warning",
             text: message ?? t("errors.moderationRejected"),
           });
+          onMapIncident?.({
+            summary: [analysis.title, message].filter(Boolean).join(" — "),
+            severity: "error",
+            ...(analysis.description
+              ? { recommendation: analysis.description }
+              : {}),
+          });
           return;
         }
 
-        onAnalysisSuccess?.(analysis.title);
+        onMapIncident?.({
+          summary: analysis.title,
+          severity: "normal",
+          ...(analysis.description
+            ? { recommendation: analysis.description }
+            : {}),
+        });
       } else {
         setFeedback({
           tone: "danger",
           text: t("errors.serverParse"),
+        });
+        onMapIncident?.({
+          summary: t("errors.serverParse"),
+          severity: "error",
         });
       }
     } catch (e) {
@@ -122,10 +144,11 @@ export default function WasteScanner({
           : t("errors.generic");
       setFeedback({ tone: "danger", text: msg });
       setResult(null);
+      onMapIncident?.({ summary: msg, severity: "error" });
     } finally {
       setLoading(false);
     }
-  }, [file, location.lat, location.lng, locationReady, onAnalysisSuccess, t]);
+  }, [file, location.lat, location.lng, locationReady, onMapIncident, t]);
 
   const displayImage = preview;
 

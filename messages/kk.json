@@ -13,7 +13,6 @@
     "brand": "Тактикалық экология",
     "subtitle": "Қала мониторингі v2.1",
     "nav": {
-      "dashboard": "Бақылау тақтасы",
       "analytics": "Талдау",
       "waste-scanner": "Қалдық сканері",
       "city-map": "Қала картасы",
@@ -40,7 +39,11 @@
     "loading": "Карта жүктелуде…",
     "selectedTitle": "Орын таңдалды",
     "selectedHint": "Фотосурет талдауы осы нүктеге бекітіледі.",
-    "incidentTitle": "Оқыға тіркелді"
+    "incidentRecordedTitle": "Оқыға тіркелді",
+    "incidentRecordedHint": "Карта және талдау деректері. Қажет болса, мобильді топ жіберіңіз.",
+    "incidentErrorTitle": "Тексеру қажет",
+    "incidentErrorHint": "Модерация немесе талдау қатесі. Сурет пен мекенжайды тексеріңіз.",
+    "recommendationCaption": "Ұсыныс"
   },
   "WasteScanner": {
     "title": "Қоқыс AI",
@@ -67,26 +70,40 @@
       "moderationRejected": "Сурет модерация жүйесімен қабылданбады."
     }
   },
-  "Dashboard": {
-    "smartCityTitle": "Smart City AI",
-    "smartCitySubtitle": "Оқығаларды анықтау жүйесі",
-    "uploadEvidence": "Дәлел жүктеу",
-    "clickOrDrag": "Суретті басыңыз немесе сүйреңіз",
-    "startAnalysis": "AI талдауын бастау",
-    "analyzing": "Талдау…",
-    "criticalAlert": "МАҢЫЗДЫ ЕСКЕРТУ",
-    "photoAnalyzed": "Фото талданды",
-    "category": "Санат",
-    "urgency": "Шұғылдық",
-    "urgencyLevels": {
-      "high": "жоғары",
-      "medium": "орташа",
-      "low": "төмен"
-    },
-    "locationPlace": "Орналасу",
-    "autoRecommendation": "Ұсыныс",
-    "ignoreCase": "Елемеу",
-    "dispatchTeam": "Топ жіберу",
-    "previewAlt": "Қарау"
+  "Incidents": {
+    "title": "Тіркелген оқиғалар",
+    "subtitle": "Картадан барлық жазбалар: сәтті талдау және модерация қателері.",
+    "emptyTitle": "Әзірге жазба жоқ",
+    "emptyHint": "«Қалдық сканері» арқылы сурет жіберіңіз — жазбалар мұнда және картада сақталады.",
+    "badgeOk": "Жазба",
+    "badgeError": "Назар аударыңыз",
+    "showOnMap": "Картада көрсету",
+    "addressLine": "Мекенжай",
+    "recommendationLine": "Ұсыныс"
+  },
+  "Analytics": {
+    "title": "Шығу және талдау есебі",
+    "subtitle": "Тазалаудан кейін жазбаны алып тастаңыз — ол картадан жоға болады.",
+    "statTotal": "Барлығы белсенді",
+    "statOk": "AI талдаған",
+    "statAttention": "Тексеру қажет",
+    "queueHint": "Тазалаушылар: нысан жойылғаннан кейін жоюды растаңыз.",
+    "clearAll": "Барлығын тазалау",
+    "clearAllConfirm": "Картадағы барлық нүктелерді жою керек пе? Бұл әрекетті болдырмау мүмкін емес.",
+    "deleteConfirm": "Бұл жазбаны жою керек пе? «{title}» — картадан жоғалады.",
+    "modalDeleteTitle": "Бұл жазбаны жою керек пе?",
+    "modalDeleteBody": "Нүкте карта мен оқиғалар тізімінен жоғалады.",
+    "modalDeleteItem": "«{title}»",
+    "modalClearTitle": "Барлық нүктелерді жою керек пе?",
+    "modalClearBody": "Картадан барлық белсенді оқиғалар алынады. Болдырмау мүмкін емес.",
+    "confirmCancel": "Жоқ, қалдыру",
+    "confirmRemove": "Иә, жою",
+    "emptyTitle": "Белсенді жазба жоқ",
+    "emptyHint": "Жаңа оқиғалар қалдық сканері арқылы талдаудан кейін пайда болады.",
+    "badgeOk": "Жазба",
+    "badgeError": "Назар аударыңыз",
+    "showOnMap": "Картада көрсету",
+    "recommendation": "Ұсыныс",
+    "remove": "Тазаланды / жою"
   }
 }

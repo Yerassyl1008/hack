@@ -13,7 +13,6 @@
     "brand": "Tactical Ecology",
     "subtitle": "City Monitoring v2.1",
     "nav": {
-      "dashboard": "Dashboard",
       "analytics": "Analytics",
       "waste-scanner": "Waste Scanner",
       "city-map": "City Map",
@@ -40,7 +39,11 @@
     "loading": "Loading map…",
     "selectedTitle": "Location selected",
     "selectedHint": "Photo analysis will be tied to this point.",
-    "incidentTitle": "Incident recorded"
+    "incidentRecordedTitle": "Incident logged",
+    "incidentRecordedHint": "From map and analysis. Dispatch a field team if needed.",
+    "incidentErrorTitle": "Needs review",
+    "incidentErrorHint": "Moderation flag or analysis error. Check the photo and address, then retry.",
+    "recommendationCaption": "Recommendation"
   },
   "WasteScanner": {
     "title": "Waste AI",
@@ -87,6 +90,43 @@
     "autoRecommendation": "Recommendation",
     "ignoreCase": "Ignore",
     "dispatchTeam": "Dispatch team",
-    "previewAlt": "Preview"
+    "previewAlt": "Preview",
+    "markerAnalysisFailed": "The server could not process the image. Check the connection and retry."
+  },
+  "Incidents": {
+    "title": "Logged incidents",
+    "subtitle": "Everything added from the map: successful scans and moderation issues.",
+    "emptyTitle": "No entries yet",
+    "emptyHint": "Send a photo from Waste Scanner — entries appear here and stay on the map.",
+    "badgeOk": "Logged",
+    "badgeError": "Needs review",
+    "showOnMap": "Show on map",
+    "addressLine": "Address",
+    "recommendationLine": "Recommendation"
+  },
+  "Analytics": {
+    "title": "Field ops & analytics",
+    "subtitle": "When cleanup is done, remove the entry — it disappears from the map everywhere.",
+    "statTotal": "Open items",
+    "statOk": "AI-processed",
+    "statAttention": "Needs review",
+    "queueHint": "Crew: confirm removal after the site is cleared.",
+    "clearAll": "Clear all",
+    "clearAllConfirm": "Delete every map pin? This cannot be undone.",
+    "deleteConfirm": "Remove this incident? \"{title}\" will disappear from the map.",
+    "modalDeleteTitle": "Remove this incident?",
+    "modalDeleteBody": "The pin will disappear from the map and incident lists.",
+    "modalDeleteItem": "“{title}”",
+    "modalClearTitle": "Remove all pins?",
+    "modalClearBody": "Every open incident will be cleared from the map and logs. This can’t be undone.",
+    "confirmCancel": "No, keep it",
+    "confirmRemove": "Yes, remove",
+    "emptyTitle": "No open items",
+    "emptyHint": "New incidents appear after photo analysis in Waste Scanner.",
+    "badgeOk": "Logged",
+    "badgeError": "Review",
+    "showOnMap": "Show on map",
+    "recommendation": "Recommendation",
+    "remove": "Mark cleared"
   }
 }
